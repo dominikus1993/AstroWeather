@@ -1,15 +1,26 @@
 package dominikus1993.astroweather
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.View
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
+import model.Time
+import presenters.IAstroWeatherMainActivityPresenter
+import presenters.MainActivityPresenter
+import view.IAstroWeatherView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
+    val handler = Handler()
+    private val presenter:IAstroWeatherMainActivityPresenter presenter;
+
+    constructor(){
+        presenter = MainActivityPresenter()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,5 +50,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun showData(data: Time) {
+        val timer = findViewById(R.id.time) as TextView
+
     }
 }
