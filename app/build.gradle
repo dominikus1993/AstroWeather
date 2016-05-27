@@ -30,6 +30,7 @@ dependencies {
     compile 'com.android.support:design:23.2.0'
     compile files('libs/astrocalculator.jar')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'joda-time:joda-time:2.3'
 }
 repositories {
     mavenCentral()
