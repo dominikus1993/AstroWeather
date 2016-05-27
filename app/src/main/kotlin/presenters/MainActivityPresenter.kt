@@ -1,8 +1,11 @@
 package presenters
 
+import android.os.Handler
 import model.Time
+import org.joda.time.DateTime
+import utils.format
 import view.IAstroWeatherView
-import java.util.logging.Handler
+
 
 /**
  * Created by domin_000 on 27.05.2016.
@@ -14,7 +17,15 @@ class MainActivityPresenter : IAstroWeatherMainActivityPresenter{
         this.view = view
     }
 
-    fun getDateTime(handler:Handler){
-        view.showData()
+    override fun getDateTime(handler: Handler) : Runnable{
+        return object : Runnable {
+            override fun run() {
+                val time = DateTime()
+
+                view.showData(Time(time.format()))
+
+                handler.postDelayed(this, 500)
+            }
+        }
     }
 }
