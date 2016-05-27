@@ -9,14 +9,14 @@ import view.IAstroWeatherView
 /**
  * Created by domin_000 on 27.05.2016.
  */
-class SunFragmentPresenter{
+class SunFragmentPresenter : ISunFragmentPresenter{
     private val view: IAstroWeatherView<SunData>;
 
     constructor(view: IAstroWeatherView<SunData>) {
         this.view = view
     }
 
-    fun sunDataTimer(handler: Handler, appSettings: AppData): Runnable {
+    override fun sunDataTimer(handler: Handler, appSettings: AppData): Runnable {
         return object : Runnable {
             override fun run() {
 
