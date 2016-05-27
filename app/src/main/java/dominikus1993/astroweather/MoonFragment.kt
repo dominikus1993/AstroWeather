@@ -2,10 +2,14 @@ package dominikus1993.astroweather
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dependency.MoonFragmentDependencyResolver
+import model.MoonData
+import utils.PreferencesUtils
 import view.IAstroWeatherView
 
 /**
@@ -15,9 +19,10 @@ import view.IAstroWeatherView
  * Activities containing this fragment MUST implement the [OnListFragmentInteractionListener]
  * interface.
  */
-class MoonFragment : Fragment(), IAstroWeatherView<MoonFragment> {
+class MoonFragment : Fragment(), IAstroWeatherView<MoonData> {
 
-
+    val presenter = MoonFragmentDependencyResolver.get(this)
+    val updateAstroDataHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +32,9 @@ class MoonFragment : Fragment(), IAstroWeatherView<MoonFragment> {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_moon_list, container, false)
+        val settings = PreferencesUtils.getPreferences { s, i -> this.activity.getSharedPreferences(s,i) }
+        updateAstroDataHandler.removeCallbacksAndMessages(null)
+        updateAstroDataHandler.postDelayed(presenter.moonDataTimer(updateAstroDataHandler, settings), settings.interval.toLong())
         return view
     }
 
@@ -39,9 +47,10 @@ class MoonFragment : Fragment(), IAstroWeatherView<MoonFragment> {
         super.onDetach()
     }
 
-    override fun showData(data: MoonFragment) {
+    override fun showData(data: MoonData) {
         throw UnsupportedOperationException()
     }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
