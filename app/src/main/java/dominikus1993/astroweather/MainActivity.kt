@@ -1,5 +1,6 @@
 package dominikus1993.astroweather
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.view.ViewPager
@@ -53,7 +54,8 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true
+            val intent = Intent(this, Settings::class.java)
+            startActivity(intent)
         }
 
         return super.onOptionsItemSelected(item)

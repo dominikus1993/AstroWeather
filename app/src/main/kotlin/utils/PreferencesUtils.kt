@@ -20,18 +20,18 @@ class PreferencesUtils{
             val interval = intervalPreferences.getInt(Constants.Interval.value, 1)
             return AppData(location, interval)
         }
+        fun setPreferences(getSharedPreferences : (String, Int) -> SharedPreferences, appData: AppData) {
+            val locationPreferencesEditor = getSharedPreferences(Constants.Location.value, 0).edit()
+            val intervalPreferencesEditor = getSharedPreferences(Constants.Interval.value, 0).edit()
+
+            locationPreferencesEditor.putFloat(Constants.Latitude.value, appData.location.latitude.toFloat())
+            locationPreferencesEditor.putFloat(Constants.Longitude.value, appData.location.longitude.toFloat())
+            locationPreferencesEditor.commit()
+
+            intervalPreferencesEditor.putInt(Constants.Interval.value, appData.interval)
+            intervalPreferencesEditor.commit()
+
+        }
     }
 
-    fun setPreferences(getSharedPreferences : (String, Int) -> SharedPreferences, appData: AppData) {
-        val locationPreferencesEditor = getSharedPreferences(Constants.Location.value, 0).edit()
-        val intervalPreferencesEditor = getSharedPreferences(Constants.Interval.value, 0).edit()
-
-        locationPreferencesEditor.putFloat(Constants.Latitude.value, appData.location.latitude.toFloat())
-        locationPreferencesEditor.putFloat(Constants.Longitude.value, appData.location.longitude.toFloat())
-        locationPreferencesEditor.commit()
-
-        intervalPreferencesEditor.putInt(Constants.Interval.value, appData.interval)
-        intervalPreferencesEditor.commit()
-
-    }
 }
