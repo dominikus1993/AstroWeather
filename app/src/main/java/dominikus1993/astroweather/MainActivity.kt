@@ -2,7 +2,6 @@ package dominikus1993.astroweather
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -34,8 +33,8 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
         val viewPager = findViewById(R.id.viewpager) as ViewPager
         setupViewPager(viewPager)
 
-        val tabLayout = findViewById(R.id.tabs) as TabLayout
-        tabLayout.setupWithViewPager(viewPager)
+//        val tabLayout = findViewById(R.id.tabs) as TabLayout
+//        tabLayout.setupWithViewPager(viewPager)
 
         handler.postDelayed(presenter.getDateTime(handler), 1000)
     }
