@@ -2,6 +2,8 @@ package dominikus1993.astroweather
 
 import android.os.Bundle
 import android.os.Handler
+import android.support.design.widget.TabLayout
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
@@ -10,6 +12,7 @@ import android.widget.TextView
 import model.Time
 import presenters.IAstroWeatherMainActivityPresenter
 import presenters.MainActivityPresenter
+import utils.AstroWeatherViewPageAdapter
 import view.IAstroWeatherView
 
 class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
@@ -27,6 +30,13 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
         setContentView(R.layout.activity_main)
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
+
+        val viewPager = findViewById(R.id.viewpager) as ViewPager
+        setupViewPager(viewPager)
+
+        val tabLayout = findViewById(R.id.tabs) as TabLayout
+        tabLayout.setupWithViewPager(viewPager)
+
         handler.postDelayed(presenter.getDateTime(handler), 1000)
     }
 
@@ -48,6 +58,12 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    fun setupViewPager(pager: ViewPager){
+        val adapter = AstroWeatherViewPageAdapter(supportFragmentManager)
+        adapter.addFragment(MoonFragment(), "Moon")
+        pager.adapter = adapter
     }
 
     override fun showData(data: Time) {

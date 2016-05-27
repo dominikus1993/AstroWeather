@@ -48,7 +48,7 @@ class MoonFragment : Fragment(), IAstroWeatherView<MoonData> {
     }
 
     override fun showData(data: MoonData) {
-        throw UnsupportedOperationException()
+
     }
 
     /**

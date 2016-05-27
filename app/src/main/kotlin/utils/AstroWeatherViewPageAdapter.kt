@@ -26,7 +26,7 @@ class AstroWeatherViewPageAdapter(val manager: FragmentManager) : FragmentPagerA
     }
 
     override fun getPageTitle(position: Int):String{
-        return ""
+        return mFragmentTitleList[position]
     }
 
 }
