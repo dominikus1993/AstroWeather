@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.domin_000.astrocalculator.MoonFragment"
-    android:layout_marginTop="60dp">
+    tools:context="com.example.domin_000.astrocalculator.MoonFragment">
 
 
     <LinearLayout
@@ -11,7 +10,8 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="90dp">
 
         <TableLayout
             android:layout_width="match_parent"
