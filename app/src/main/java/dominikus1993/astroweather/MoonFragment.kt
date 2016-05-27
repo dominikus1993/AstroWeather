@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import view.IAstroWeatherView
 
 /**
  * A fragment representing a list of Items.
@@ -14,7 +15,9 @@ import android.view.ViewGroup
  * Activities containing this fragment MUST implement the [OnListFragmentInteractionListener]
  * interface.
  */
-class MoonFragment : Fragment() {
+class MoonFragment : Fragment(), IAstroWeatherView<MoonFragment> {
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +39,9 @@ class MoonFragment : Fragment() {
         super.onDetach()
     }
 
+    override fun showData(data: MoonFragment) {
+        throw UnsupportedOperationException()
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -51,7 +57,4 @@ class MoonFragment : Fragment() {
     }
 
 }
-/**
- * Mandatory empty constructor for the fragment manager to instantiate the
- * fragment (e.g. upon screen orientation changes).
- */
+
