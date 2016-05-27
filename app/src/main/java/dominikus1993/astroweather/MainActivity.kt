@@ -1,6 +1,7 @@
 package dominikus1993.astroweather
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.view.ViewPager
@@ -13,6 +14,7 @@ import model.Time
 import presenters.IAstroWeatherMainActivityPresenter
 import presenters.MainActivityPresenter
 import utils.AstroWeatherViewPageAdapter
+import utils.LandscapePageAdapter
 import view.IAstroWeatherView
 
 class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
@@ -32,7 +34,7 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
         setSupportActionBar(toolbar)
 
         val viewPager = findViewById(R.id.viewpager) as ViewPager
-        setupViewPager(viewPager)
+        setupViewPager(viewPager, this.resources.configuration.orientation)
 
 //        val tabLayout = findViewById(R.id.tabs) as TabLayout
 //        tabLayout.setupWithViewPager(viewPager)
@@ -61,8 +63,14 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
         return super.onOptionsItemSelected(item)
     }
 
-    fun setupViewPager(pager: ViewPager){
-        val adapter = AstroWeatherViewPageAdapter(supportFragmentManager)
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        val viewPager = findViewById(R.id.viewpager) as ViewPager
+        setupViewPager(viewPager, if(newConfig?.orientation == null) Configuration.ORIENTATION_PORTRAIT else newConfig?.orientation  as Int)
+    }
+
+    fun setupViewPager(pager: ViewPager, orientation : Int){
+        val adapter = if (orientation == Configuration.ORIENTATION_PORTRAIT) AstroWeatherViewPageAdapter(supportFragmentManager) else LandscapePageAdapter(supportFragmentManager)
         adapter.addFragment(MoonFragment(), "Moon")
         adapter.addFragment(SunFragment(), "Sun")
         pager.adapter = adapter
