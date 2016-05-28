@@ -8,7 +8,12 @@ import java.util.*
 /**
  * Created by domin_000 on 27.05.2016.
  */
-open class AstroWeatherViewPageAdapter(val manager: FragmentManager) : FragmentPagerAdapter (manager){
+abstract class AbstractAstroWeatherPageAdapter(val manager: FragmentManager) : FragmentPagerAdapter (manager){
+    abstract fun addFragment(fragment:Fragment, title:String)
+}
+
+open class AstroWeatherViewPageAdapter(manager: FragmentManager) : AbstractAstroWeatherPageAdapter (manager){
+
     private val  mFragmentList: ArrayList<Fragment> = arrayListOf()
     private val mFragmentTitleList:ArrayList<String> = arrayListOf()
 
@@ -20,7 +25,7 @@ open class AstroWeatherViewPageAdapter(val manager: FragmentManager) : FragmentP
         return mFragmentList.size
     }
 
-    fun addFragment(fragment:Fragment, title:String){
+    override fun addFragment(fragment:Fragment, title:String){
         mFragmentList.add(fragment)
         mFragmentTitleList.add(title)
     }
@@ -32,7 +37,7 @@ open class AstroWeatherViewPageAdapter(val manager: FragmentManager) : FragmentP
 }
 
 
-class LandscapePageAdapter(manager: FragmentManager)  : AstroWeatherViewPageAdapter(manager) {
+open class LandscapePageAdapter(manager: FragmentManager)  : AstroWeatherViewPageAdapter(manager) {
     override fun getPageWidth(position: Int): Float {
         return 1f / 2;
     }

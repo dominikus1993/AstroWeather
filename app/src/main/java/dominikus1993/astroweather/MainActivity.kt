@@ -10,11 +10,10 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import dependency.ViewPagerFactory
 import model.Time
 import presenters.IAstroWeatherMainActivityPresenter
 import presenters.MainActivityPresenter
-import utils.AstroWeatherViewPageAdapter
-import utils.LandscapePageAdapter
 import view.IAstroWeatherView
 
 class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
@@ -70,7 +69,8 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
     }
 
     fun setupViewPager(pager: ViewPager, orientation : Int){
-        val adapter = if (orientation == Configuration.ORIENTATION_PORTRAIT) AstroWeatherViewPageAdapter(supportFragmentManager) else LandscapePageAdapter(supportFragmentManager)
+        val isTablet:Boolean = resources.getBoolean(R.bool.isTablet)
+        val adapter = ViewPagerFactory.get(isTablet, orientation, supportFragmentManager)
         adapter.addFragment(MoonFragment(), "Moon")
         adapter.addFragment(SunFragment(), "Sun")
         pager.adapter = adapter
