@@ -30,9 +30,24 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <fr.castorflex.android.verticalviewpager.VerticalViewPager
-        android:id="@+id/viewpager"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/sun_fragment"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/moon_fragment"/>
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

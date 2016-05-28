@@ -32,8 +32,7 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        val viewPager = findViewById(R.id.viewpager) as ViewPager
-        setupViewPager(viewPager, this.resources.configuration.orientation)
+        setupViewPager(this.resources.configuration.orientation)
 
 //        val tabLayout = findViewById(R.id.tabs) as TabLayout
 //        tabLayout.setupWithViewPager(viewPager)
@@ -64,16 +63,23 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
-        val viewPager = findViewById(R.id.viewpager) as ViewPager
-        setupViewPager(viewPager, if(newConfig?.orientation == null) Configuration.ORIENTATION_PORTRAIT else newConfig?.orientation  as Int)
+
+        setupViewPager(if(newConfig?.orientation == null) Configuration.ORIENTATION_PORTRAIT else newConfig?.orientation  as Int)
     }
 
-    fun setupViewPager(pager: ViewPager, orientation : Int){
-        val isTablet:Boolean = resources.getBoolean(R.bool.isTablet)
-        val adapter = ViewPagerFactory.get(isTablet, orientation, supportFragmentManager)
-        adapter.addFragment(MoonFragment(), "Moon")
-        adapter.addFragment(SunFragment(), "Sun")
-        pager.adapter = adapter
+    fun setupViewPager(orientation : Int){
+        val pager = findViewById(R.id.viewpager) as ViewPager?
+        if(pager != null){
+            val isTablet:Boolean = resources.getBoolean(R.bool.isTablet)
+            val adapter = ViewPagerFactory.get(isTablet, orientation, supportFragmentManager)
+            adapter.addFragment(SunFragment(), "Sun")
+            adapter.addFragment(MoonFragment(), "Moon")
+            pager.adapter = adapter
+        }
+        else{
+            supportFragmentManager.beginTransaction().replace(R.id.sun_fragment, SunFragment()).replace(R.id.moon_fragment, MoonFragment()).commit();
+        }
+
     }
 
     override fun showData(data: Time) {
