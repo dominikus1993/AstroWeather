@@ -21,7 +21,7 @@ class MoonFragmentPresenter : IMoonFragmentPresenter{
         return object : Runnable {
             override fun run() {
                 view.showData(AstroCalculatorUtils.getMoonData(appSettings.location))
-                handler.postDelayed(this, 1000);
+                handler.postDelayed(this, appSettings.interval.toLong());
             }
         }
     }

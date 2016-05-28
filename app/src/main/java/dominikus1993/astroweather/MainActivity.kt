@@ -34,9 +34,6 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
 
         setupViewPager(this.resources.configuration.orientation)
 
-//        val tabLayout = findViewById(R.id.tabs) as TabLayout
-//        tabLayout.setupWithViewPager(viewPager)
-
         handler.postDelayed(presenter.getDateTime(handler), 1000)
     }
 
