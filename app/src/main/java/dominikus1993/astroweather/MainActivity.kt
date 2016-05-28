@@ -70,8 +70,7 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
     fun setupViewPager(orientation : Int){
         val pager = findViewById(R.id.viewpager) as ViewPager?
         if(pager != null){
-            val isTablet:Boolean = resources.getBoolean(R.bool.isTablet)
-            val adapter = ViewPagerFactory.get(isTablet, orientation, supportFragmentManager)
+            val adapter = ViewPagerFactory.get(orientation, supportFragmentManager)
             adapter.addFragment(SunFragment(), "Sun")
             adapter.addFragment(MoonFragment(), "Moon")
             pager.adapter = adapter

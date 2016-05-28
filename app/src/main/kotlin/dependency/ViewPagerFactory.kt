@@ -9,18 +9,12 @@ import utils.LandscapePageAdapter
 /**
  * Created by domin_000 on 28.05.2016.
  */
-class ViewPagerFactory{
-    companion object{
-        fun get(isTablet:Boolean, orientation:Int, supportFragmentManager: FragmentManager): AbstractAstroWeatherPageAdapter {
-            if(!isTablet){
-                if (orientation == Configuration.ORIENTATION_PORTRAIT){
-                    return AstroWeatherViewPageAdapter(supportFragmentManager)
-                }
-                else{
-                   return LandscapePageAdapter(supportFragmentManager)
-                }
-            }
-            else{
+class ViewPagerFactory {
+    companion object {
+        fun get(orientation: Int, supportFragmentManager: FragmentManager): AbstractAstroWeatherPageAdapter {
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                return AstroWeatherViewPageAdapter(supportFragmentManager)
+            } else {
                 return LandscapePageAdapter(supportFragmentManager)
             }
         }
