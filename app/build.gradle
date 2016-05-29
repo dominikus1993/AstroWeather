@@ -28,18 +28,18 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile files('libs/astrocalculator.jar')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    // http://mvnrepository.com/artifact/com.google.code.gson/gson
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.4'
+    // http://mvnrepository.com/artifact/com.google.http-client/google-http-client-jackson2
+    compile group: 'com.google.http-client', name: 'google-http-client-jackson2', version: '1.17.0-rc'
+
+
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
     compile 'joda-time:joda-time:2.3'
     compile 'com.android.support:support-v4:23.2.0'
     compile 'com.android.support:recyclerview-v7:23.2.0'
-    // http://mvnrepository.com/artifact/com.google.code.gson/gson
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.4'
-    // http://mvnrepository.com/artifact/com.google.http-client/google-http-client-jackson2
-    compile group: 'com.google.http-client', name: 'google-http-client-jackson2', version: '1.17.0-rc'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
-
-
 }
 repositories {
     mavenCentral()
