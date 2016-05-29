@@ -4,11 +4,12 @@ import model.WeatherData
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * Created by domin_000 on 29.05.2016.
  */
 interface IOpenWeatherService {
-    @GET( "?lat={lat}&lon={lon}&appid={appId}")
-    fun getWatherForLocalization(@Path("lat") latitude:Double, @Path("lon") longitude:Double, @Path("appId") appId: String): Call<WeatherData>
+    @GET("/")
+    fun getWatherForLocalization(@Query("lat") latitude:Double, @Query("lon") longitude:Double, @Query("appId") appId: String): Call<WeatherData>
 }

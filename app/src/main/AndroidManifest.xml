@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dominikus1993.astroweather">
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.LOCATION_HARDWARE"/>
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_NETWORK_STATE"
+        android:maxSdkVersion="23" />
+    <uses-permission-sdk-23 android:name="LOCATION_HARDWARE"
+        android:maxSdkVersion="23" />
+    <uses-permission-sdk-23 android:name="android.permission.INTERNET"
+        android:maxSdkVersion="23" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -36,6 +44,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dominikus1993.astroweather.MainActivity" />
         </activity>
+
     </application>
 
 </manifest>

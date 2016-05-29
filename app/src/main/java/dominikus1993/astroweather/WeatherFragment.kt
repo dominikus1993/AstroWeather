@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -53,8 +52,8 @@ class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> {
         super.onAttach(context)
     }
     private fun requestNetworkState(){
-        if(!AstroCalculatorUtils.hasPermissions(context, arrayOf(Manifest.permission.ACCESS_NETWORK_STATE))) {
-            ActivityCompat.requestPermissions(this.activity, arrayOf(Manifest.permission.ACCESS_NETWORK_STATE), AppConstants.REQUEST_NETWORK_STATE);
+        if(!AstroCalculatorUtils.hasPermissions(context, arrayOf(Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET))) {
+            ActivityCompat.requestPermissions(this.activity, arrayOf(Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET), AppConstants.REQUEST_NETWORK_STATE);
         }
     }
 

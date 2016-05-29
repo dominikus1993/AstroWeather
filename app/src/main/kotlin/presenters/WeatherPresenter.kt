@@ -2,8 +2,12 @@ package presenters
 
 import android.content.Context
 import android.os.Handler
+import android.util.Log
 import model.Localization
 import model.LocalizationWeatherData
+import model.WeatherData
+import retrofit2.Call
+import retrofit2.Response
 import services.IOpenWeatherService
 import utils.AstroCalculatorUtils
 import utils.ConfigUtil
@@ -29,8 +33,17 @@ class WeatherPresenter : IWeatherPresenter{
             override fun run() {
                     if(AstroCalculatorUtils.isOnline(context)){
                         val data = service.getWatherForLocalization(localization.latitude, localization.longitude, ConfigUtil.getByKey(context, Constants.OpenWeatherApiKey.value) as String)
-                        val response = data.execute()
-                        view.showData(LocalizationWeatherData(localization, response.body()))
+
+                        data.enqueue(object : retrofit2.Callback<WeatherData>{
+                            override fun onResponse(call: Call<WeatherData>?, response: Response<WeatherData>?) {
+                                val res = response?.body()
+                                view.showData(LocalizationWeatherData(localization, res as WeatherData ))
+                            }
+
+                            override fun onFailure(call: Call<WeatherData>?, t: Throwable?) {
+                                Log.w("", "No nie udało sie")
+                            }
+                        })
                     }
                 handler.postDelayed(this, 3600000);
             }
