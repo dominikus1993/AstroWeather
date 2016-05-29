@@ -1,5 +1,7 @@
 package utils
 
+import android.content.Context
+import android.net.ConnectivityManager
 import com.astrocalculator.AstroCalculator
 import com.astrocalculator.AstroDateTime
 import model.MoonData
@@ -24,6 +26,12 @@ class AstroCalculatorUtils{
             val calendar = GregorianCalendar()
             val moonModel = AstroCalculator(AstroDateTime(time.yearOfEra, time.monthOfYear, time.dayOfMonth, time.hourOfDay, time.minuteOfHour, time.secondOfMinute, calendar.timeZone.rawOffset, true), location)
             return MoonData(moonModel.moonInfo, location)
+        }
+
+        fun isOnline(context : Context) :Boolean {
+            val  connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = connectivityManager.activeNetworkInfo;
+            return networkInfo != null && networkInfo.isConnectedOrConnecting;
         }
     }
 }

@@ -8,5 +8,6 @@ public enum class Constants(val value:String){
     Longitude("longitude"),
     Latitude("latitude"),
     Interval("interval"),
-    OpenWeatherBaseUrl("OpenWeatherBaseUrl")
+    OpenWeatherBaseUrl("OpenWeatherBaseUrl"),
+    OpenWeatherApiKey("OpenWeatherApiKey")
 }
