@@ -1,12 +1,23 @@
 package dominikus1993.astroweather
 
+import android.Manifest
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import dependency.WeatherPresenterDependencyResolver
+import model.Localization
+import model.LocalizationWeatherData
+import presenters.IWeatherPresenter
+import utils.AppConstants
+import utils.AstroCalculatorUtils
+import view.IAstroWeatherView
 
 
 /**
@@ -17,28 +28,41 @@ import android.view.ViewGroup
  * Use the [WeatherFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class WeatherFragment : Fragment() {
+class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> {
 
-    // TODO: Rename and change types of parameters
+    private val handler = Handler()
+    private lateinit var presenter:IWeatherPresenter
+    private lateinit var test:TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        presenter = WeatherPresenterDependencyResolver.get(this, context)
+        requestNetworkState()
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_weather, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_weather, container, false)
+        test = view.findViewById(R.id.test) as TextView
+        handler.removeCallbacksAndMessages(null)
+        handler.postDelayed(presenter.getWeatherDataByLocalization(Localization(19.45,51.77), handler), 0L)
+        return view
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
+    }
+    private fun requestNetworkState(){
+        if(!AstroCalculatorUtils.hasPermissions(context, arrayOf(Manifest.permission.ACCESS_NETWORK_STATE))) {
+            ActivityCompat.requestPermissions(this.activity, arrayOf(Manifest.permission.ACCESS_NETWORK_STATE), AppConstants.REQUEST_NETWORK_STATE);
+        }
     }
 
     override fun onDetach() {
         super.onDetach()
     }
 
+    override fun showData(data: LocalizationWeatherData) {
+        test.text = data.weatherData.main.temp.toString()
+    }
 }// Required empty public constructor

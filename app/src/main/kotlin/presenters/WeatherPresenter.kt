@@ -27,13 +27,11 @@ class WeatherPresenter : IWeatherPresenter{
     override fun getWeatherDataByLocalization(localization: Localization, handler:Handler): Runnable {
         return object : Runnable {
             override fun run() {
-
-                if(AstroCalculatorUtils.isOnline(context)){
-                    val data = service.getWatherForLocalization(localization.latitude, localization.longitude, ConfigUtil.getByKey(context, Constants.OpenWeatherApiKey.value) as String)
-                    val response = data.execute()
-                    view.showData(LocalizationWeatherData(localization, response.body()))
-                }
-
+                    if(AstroCalculatorUtils.isOnline(context)){
+                        val data = service.getWatherForLocalization(localization.latitude, localization.longitude, ConfigUtil.getByKey(context, Constants.OpenWeatherApiKey.value) as String)
+                        val response = data.execute()
+                        view.showData(LocalizationWeatherData(localization, response.body()))
+                    }
                 handler.postDelayed(this, 3600000);
             }
         }

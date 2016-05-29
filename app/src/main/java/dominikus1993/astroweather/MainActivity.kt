@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
             val adapter = ViewPagerFactory.get(orientation, supportFragmentManager)
             adapter.addFragment(SunFragment(), "Sun")
             adapter.addFragment(MoonFragment(), "Moon")
+            adapter.addFragment(WeatherFragment(), "Weather")
             pager.adapter = adapter
         }
         else{

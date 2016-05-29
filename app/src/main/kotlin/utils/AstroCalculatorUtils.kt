@@ -1,7 +1,10 @@
 package utils
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
+import android.os.Build
+import android.support.v4.app.ActivityCompat
 import com.astrocalculator.AstroCalculator
 import com.astrocalculator.AstroDateTime
 import model.MoonData
@@ -32,6 +35,17 @@ class AstroCalculatorUtils{
             val  connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo = connectivityManager.activeNetworkInfo;
             return networkInfo != null && networkInfo.isConnectedOrConnecting;
+        }
+
+        fun hasPermissions(context:Context, permissions:Array<String>):Boolean{
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                for (permission in permissions) {
+                    if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }

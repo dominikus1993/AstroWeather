@@ -11,3 +11,9 @@ public enum class Constants(val value:String){
     OpenWeatherBaseUrl("OpenWeatherBaseUrl"),
     OpenWeatherApiKey("OpenWeatherApiKey")
 }
+
+ class AppConstants{
+    companion object{
+        public val REQUEST_NETWORK_STATE = 0
+    }
+}
