@@ -27,6 +27,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dominikus1993.astroweather.MainActivity" />
         </activity>
+        <activity
+            android:name=".MyLocalizations"
+            android:label="@string/title_activity_my_localizations"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dominikus1993.astroweather.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
