@@ -44,7 +44,7 @@ class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> {
         val view = inflater!!.inflate(R.layout.fragment_weather, container, false)
         test = view.findViewById(R.id.test) as TextView
         handler.removeCallbacksAndMessages(null)
-        handler.postDelayed(presenter.getWeatherDataByLocalization(Localization(19.45,51.77), handler), 0L)
+        handler.postDelayed(presenter.getWeatherDataByLocalization(Localization("19.45","51.77"), handler), 0L)
         return view
     }
 
@@ -62,6 +62,6 @@ class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> {
     }
 
     override fun showData(data: LocalizationWeatherData) {
-        test.text = data.weatherData.main.temp.toString()
+        test.text = data.weatherData?.main?.temp.toString()
     }
 }// Required empty public constructor

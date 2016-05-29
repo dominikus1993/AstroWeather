@@ -32,20 +32,21 @@ class WeatherPresenter : IWeatherPresenter{
         return object : Runnable {
             override fun run() {
                     if(AstroCalculatorUtils.isOnline(context)){
-                        val data = service.getWatherForLocalization(localization.latitude, localization.longitude, ConfigUtil.getByKey(context, Constants.OpenWeatherApiKey.value) as String)
-
+                        val data = service.getWeatherForLocalization(localization.latitude, localization.longitude, ConfigUtil.getByKey(context, Constants.OpenWeatherApiKey.value) as String)
+                        val runnable = this
                         data.enqueue(object : retrofit2.Callback<WeatherData>{
                             override fun onResponse(call: Call<WeatherData>?, response: Response<WeatherData>?) {
                                 val res = response?.body()
-                                view.showData(LocalizationWeatherData(localization, res as WeatherData ))
+                                view.showData(LocalizationWeatherData(localization, res ))
+                                handler.postDelayed(runnable, 3600000);
                             }
 
                             override fun onFailure(call: Call<WeatherData>?, t: Throwable?) {
                                 Log.w("", "No nie udało sie")
+                                handler.postDelayed(runnable, 3600000);
                             }
                         })
                     }
-                handler.postDelayed(this, 3600000);
             }
         }
     }
