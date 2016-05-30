@@ -44,7 +44,7 @@ class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> {
         val view = inflater!!.inflate(R.layout.fragment_weather, container, false)
         test = view.findViewById(R.id.test) as TextView
         handler.removeCallbacksAndMessages(null)
-        handler.postDelayed(presenter.getWeatherDataByLocalization(Localization("19.45","51.77"), handler), 0L)
+        handler.postDelayed(presenter.getWeatherDataByLocalization(Localization("London"), handler), 0L)
         return view
     }
 
