@@ -62,6 +62,6 @@ class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> {
     }
 
     override fun showData(data: LocalizationWeatherData) {
-        test.text = data.weatherData?.main?.temp.toString()
+        test.text = data.weatherData?.list?.first()?.main?.temp.toString()
     }
 }// Required empty public constructor

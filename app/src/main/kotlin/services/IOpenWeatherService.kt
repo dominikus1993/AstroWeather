@@ -11,5 +11,5 @@ import retrofit2.http.Query
  */
 interface IOpenWeatherService {
     @GET("data/2.5/forecast")
-    fun getWeatherForLocalization(@Query("q") latitude:String, @Query("appId") appId: String): Call<WeatherData>
+    fun getWeatherForLocalization(@Query("q") cityName:String, @Query("appId") appId: String): Call<WeatherData>
 }

@@ -4,9 +4,10 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 /**
- * Created by domin_000 on 29.05.2016.
+ * Created by domin_000 on 30.05.2016.
  */
 class Main {
+
     /**
 
      * @return
@@ -20,32 +21,6 @@ class Main {
     @SerializedName("temp")
     @Expose
     var temp: Double? = null
-    /**
-
-     * @return
-     * * The pressure
-     */
-    /**
-
-     * @param pressure
-     * * The pressure
-     */
-    @SerializedName("pressure")
-    @Expose
-    var pressure: Int? = null
-    /**
-
-     * @return
-     * * The humidity
-     */
-    /**
-
-     * @param humidity
-     * * The humidity
-     */
-    @SerializedName("humidity")
-    @Expose
-    var humidity: Int? = null
     /**
 
      * @return
@@ -72,4 +47,70 @@ class Main {
     @SerializedName("temp_max")
     @Expose
     var tempMax: Double? = null
+    /**
+
+     * @return
+     * * The pressure
+     */
+    /**
+
+     * @param pressure
+     * * The pressure
+     */
+    @SerializedName("pressure")
+    @Expose
+    var pressure: Double? = null
+    /**
+
+     * @return
+     * * The seaLevel
+     */
+    /**
+
+     * @param seaLevel
+     * * The sea_level
+     */
+    @SerializedName("sea_level")
+    @Expose
+    var seaLevel: Double? = null
+    /**
+
+     * @return
+     * * The grndLevel
+     */
+    /**
+
+     * @param grndLevel
+     * * The grnd_level
+     */
+    @SerializedName("grnd_level")
+    @Expose
+    var grndLevel: Double? = null
+    /**
+
+     * @return
+     * * The humidity
+     */
+    /**
+
+     * @param humidity
+     * * The humidity
+     */
+    @SerializedName("humidity")
+    @Expose
+    var humidity: Int? = null
+    /**
+
+     * @return
+     * * The tempKf
+     */
+    /**
+
+     * @param tempKf
+     * * The temp_kf
+     */
+    @SerializedName("temp_kf")
+    @Expose
+    var tempKf: Int? = null
+
 }
