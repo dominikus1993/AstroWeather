@@ -33,6 +33,6 @@ class Wind {
      */
     @SerializedName("deg")
     @Expose
-    var deg: Int? = null
+    var deg: Double? = null
 
 }
