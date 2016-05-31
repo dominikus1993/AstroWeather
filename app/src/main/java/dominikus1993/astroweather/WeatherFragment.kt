@@ -3,7 +3,6 @@ package dominikus1993.astroweather
 import android.Manifest
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -14,11 +13,12 @@ import dependency.WeatherPresenterDependencyResolver
 import model.AppData
 import model.Localization
 import model.LocalizationWeatherData
-import model.WeatherData
+import model.WeatherSettingsData
 import presenters.IWeatherPresenter
 import utils.AppConstants
 import utils.AstroCalculatorUtils
 import utils.PreferencesUtils
+import utils.WeatherUttils
 import view.IAstroWeatherView
 
 
@@ -68,6 +68,6 @@ class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> {
 
         test.text = data.weatherData?.list?.first()?.main?.temp.toString()
 
-        PreferencesUtils.setPreferences({s,i -> this.activity.getSharedPreferences(s,i)}, AppData(settings.location, settings.interval, data))
+        PreferencesUtils.setPreferences({s,i -> this.activity.getSharedPreferences(s,i)}, AppData(settings.location, settings.interval, WeatherUttils.changeWeatherByLocalization(settings, data)))
     }
 }// Required empty public constructor

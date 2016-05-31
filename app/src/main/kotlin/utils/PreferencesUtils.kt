@@ -5,7 +5,7 @@ import com.astrocalculator.AstroCalculator
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import model.AppData
-import model.LocalizationWeatherData
+import model.WeatherSettingsData
 
 /**
  * Created by domin_000 on 27.05.2016.
@@ -31,7 +31,7 @@ class PreferencesUtils{
             val location = AstroCalculator.Location(latitude, longitude)
             val interval = intervalPreferences.getInt(Constants.Interval.value, 1)
 
-            val weatherData = gson.fromJson(weatherPreferences.getString(Constants.WeatherData.value, "{}"), LocalizationWeatherData::class.java)
+            val weatherData = gson.fromJson(weatherPreferences.getString(Constants.WeatherData.value, "{}"), WeatherSettingsData::class.java)
 
             return AppData(location, interval, weatherData)
         }
@@ -47,7 +47,7 @@ class PreferencesUtils{
             intervalPreferencesEditor.putInt(Constants.Interval.value, appData.interval)
             intervalPreferencesEditor.commit()
 
-            weatherPreferences.putString(Constants.WeatherData.value + appData.weatherData.localization?.cityName, gson.toJson(appData.weatherData))
+            weatherPreferences.putString(Constants.WeatherData.value, gson.toJson(appData.weatherData))
             weatherPreferences.commit()
 
         }
