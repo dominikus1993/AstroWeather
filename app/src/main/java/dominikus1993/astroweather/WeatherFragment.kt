@@ -47,7 +47,7 @@ class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> {
         val view = inflater!!.inflate(R.layout.fragment_weather, container, false)
         test = view.findViewById(R.id.test) as TextView
         settings = PreferencesUtils.getPreferences { s, i -> this.activity.getSharedPreferences(s,i) }
-        presenter.getWeatherDataByLocalization(Localization("London"), this.context)
+        presenter.getWeatherDataByLocalization(Localization("London"), this.context, settings)
         return view
     }
 
@@ -68,6 +68,6 @@ class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> {
 
         test.text = data.weatherData?.list?.first()?.main?.temp.toString()
 
-        PreferencesUtils.setPreferences({s,i -> this.activity.getSharedPreferences(s,i)}, AppData(settings.location, settings.interval, data.weatherData as WeatherData))
+        PreferencesUtils.setPreferences({s,i -> this.activity.getSharedPreferences(s,i)}, AppData(settings.location, settings.interval, data))
     }
 }// Required empty public constructor

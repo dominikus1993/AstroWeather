@@ -1,8 +1,8 @@
 package presenters
 
 import android.content.Context
-import android.os.Handler
 import android.util.Log
+import model.AppData
 import model.Localization
 import model.LocalizationWeatherData
 import model.WeatherData
@@ -26,7 +26,7 @@ class WeatherPresenter : IWeatherPresenter {
         service = openWeatherService
     }
 
-    override fun getWeatherDataByLocalization(localization: Localization, context: Context) {
+    override fun getWeatherDataByLocalization(localization: Localization, context: Context, settings: AppData) {
         if (AstroCalculatorUtils.isOnline(context)) {
             val data = service.getWeatherForLocalization(localization.cityName, ConfigUtil.getByKey(context, Constants.OpenWeatherApiKey.value) as String)
             data.enqueue(object : retrofit2.Callback<WeatherData> {
@@ -40,6 +40,7 @@ class WeatherPresenter : IWeatherPresenter {
 
                 }
             })
+        }else{
         }
     }
 }
