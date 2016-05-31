@@ -18,7 +18,7 @@ import presenters.IWeatherPresenter
 import utils.AppConstants
 import utils.AstroCalculatorUtils
 import utils.PreferencesUtils
-import utils.WeatherUttils
+import utils.WeatherUtils
 import view.IAstroWeatherView
 
 
@@ -68,6 +68,6 @@ class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> {
 
         test.text = data.weatherData?.list?.first()?.main?.temp.toString()
 
-        PreferencesUtils.setPreferences({s,i -> this.activity.getSharedPreferences(s,i)}, AppData(settings.location, settings.interval, WeatherUttils.changeWeatherByLocalization(settings, data)))
+        PreferencesUtils.setPreferences({s,i -> this.activity.getSharedPreferences(s,i)}, AppData(settings.location, settings.interval, WeatherUtils.changeWeatherByLocalization(settings, data)))
     }
 }// Required empty public constructor

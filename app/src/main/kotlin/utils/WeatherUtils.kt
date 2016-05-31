@@ -7,7 +7,7 @@ import model.WeatherSettingsData
 /**
  * Created by domin_000 on 31.05.2016.
  */
-class WeatherUttils{
+class WeatherUtils {
     companion object{
         fun changeWeatherByLocalization(settings:AppData, data:LocalizationWeatherData): WeatherSettingsData {
             val weatherData = WeatherSettingsData()
