@@ -1,11 +1,11 @@
 package presenters
 
-import android.os.Handler
+import android.content.Context
 import model.Localization
 
 /**
  * Created by domin_000 on 29.05.2016.
  */
 interface IWeatherPresenter{
-    fun getWeatherDataByLocalization(localization: Localization, handler: Handler): Runnable
+    fun getWeatherDataByLocalization(localization: Localization, context: Context)
 }

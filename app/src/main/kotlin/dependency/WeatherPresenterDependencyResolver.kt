@@ -18,7 +18,7 @@ class WeatherPresenterDependencyResolver{
     companion object{
         fun get(view: IAstroWeatherView<LocalizationWeatherData>, context: Context):IWeatherPresenter{
             val service = Retrofit.Builder().baseUrl(ConfigUtil.getByKey(context,  Constants.OpenWeatherBaseUrl.value)).addConverterFactory(GsonConverterFactory.create()).build().create(IOpenWeatherService::class.java)
-            return WeatherPresenter(view, service, context)
+            return WeatherPresenter(view, service)
         }
     }
 }

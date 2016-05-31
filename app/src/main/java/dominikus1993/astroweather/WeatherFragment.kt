@@ -11,11 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import dependency.WeatherPresenterDependencyResolver
+import model.AppData
 import model.Localization
 import model.LocalizationWeatherData
+import model.WeatherData
 import presenters.IWeatherPresenter
 import utils.AppConstants
 import utils.AstroCalculatorUtils
+import utils.PreferencesUtils
 import view.IAstroWeatherView
 
 
@@ -29,13 +32,13 @@ import view.IAstroWeatherView
  */
 class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> {
 
-    private val handler = Handler()
     private lateinit var presenter:IWeatherPresenter
     private lateinit var test:TextView
+    private lateinit var settings:AppData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter = WeatherPresenterDependencyResolver.get(this, context)
+        presenter = WeatherPresenterDependencyResolver.get(this, this.context)
         requestNetworkState()
     }
 
@@ -43,8 +46,8 @@ class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> {
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_weather, container, false)
         test = view.findViewById(R.id.test) as TextView
-        handler.removeCallbacksAndMessages(null)
-        handler.postDelayed(presenter.getWeatherDataByLocalization(Localization("London"), handler), 0L)
+        settings = PreferencesUtils.getPreferences { s, i -> this.activity.getSharedPreferences(s,i) }
+        presenter.getWeatherDataByLocalization(Localization("London"), this.context)
         return view
     }
 
@@ -62,6 +65,9 @@ class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> {
     }
 
     override fun showData(data: LocalizationWeatherData) {
+
         test.text = data.weatherData?.list?.first()?.main?.temp.toString()
+
+        PreferencesUtils.setPreferences({s,i -> this.activity.getSharedPreferences(s,i)}, AppData(settings.location, settings.interval, data.weatherData as WeatherData))
     }
 }// Required empty public constructor

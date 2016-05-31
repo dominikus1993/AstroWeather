@@ -17,37 +17,29 @@ import view.IAstroWeatherView
 /**
  * Created by domin_000 on 29.05.2016.
  */
-class WeatherPresenter : IWeatherPresenter{
+class WeatherPresenter : IWeatherPresenter {
     private val view: IAstroWeatherView<LocalizationWeatherData>;
-    private val context:Context
-    private val service:IOpenWeatherService
+    private val service: IOpenWeatherService
 
-    constructor(view: IAstroWeatherView<LocalizationWeatherData>, openWeatherService :IOpenWeatherService, context:Context) {
+    constructor(view: IAstroWeatherView<LocalizationWeatherData>, openWeatherService: IOpenWeatherService) {
         this.view = view
-        this.context = context
         service = openWeatherService
     }
 
-    override fun getWeatherDataByLocalization(localization: Localization, handler:Handler): Runnable {
-        return object : Runnable {
-            override fun run() {
-                    if(AstroCalculatorUtils.isOnline(context)){
-                        val data = service.getWeatherForLocalization(localization.cityName, ConfigUtil.getByKey(context, Constants.OpenWeatherApiKey.value) as String)
-                        val runnable = this
-                        data.enqueue(object : retrofit2.Callback<WeatherData>{
-                            override fun onResponse(call: Call<WeatherData>?, response: Response<WeatherData>?) {
-                                val res = response?.body()
-                                view.showData(LocalizationWeatherData(localization, res ))
-                                handler.postDelayed(runnable, 3600000);
-                            }
+    override fun getWeatherDataByLocalization(localization: Localization, context: Context) {
+        if (AstroCalculatorUtils.isOnline(context)) {
+            val data = service.getWeatherForLocalization(localization.cityName, ConfigUtil.getByKey(context, Constants.OpenWeatherApiKey.value) as String)
+            data.enqueue(object : retrofit2.Callback<WeatherData> {
+                override fun onResponse(call: Call<WeatherData>?, response: Response<WeatherData>?) {
+                    val res = response?.body()
+                    view.showData(LocalizationWeatherData(localization, res))
+                }
 
-                            override fun onFailure(call: Call<WeatherData>?, t: Throwable?) {
-                                Log.w("", "No nie udało sie")
-                                handler.postDelayed(runnable, 3600000);
-                            }
-                        })
-                    }
-            }
+                override fun onFailure(call: Call<WeatherData>?, t: Throwable?) {
+                    Log.w("", "No nie udało sie")
+
+                }
+            })
         }
     }
 }

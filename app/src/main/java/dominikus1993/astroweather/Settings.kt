@@ -15,13 +15,14 @@ class Settings : AppCompatActivity() {
     private lateinit var longitude:TextView
     private lateinit var interval: TextView
     private lateinit var saveButton: Button
+    private lateinit var settings:AppData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-
+        settings = PreferencesUtils.getPreferences { s, i -> getSharedPreferences(s,i)}
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
 
@@ -33,13 +34,12 @@ class Settings : AppCompatActivity() {
         setTextBoxes()
 
         saveButton.setOnClickListener { l ->
-            val settings = AppData(AstroCalculator.Location(latitude.text.toString().toDouble(), longitude.text.toString().toDouble()), interval.text.toString().toInt())
+            val settings = AppData(AstroCalculator.Location(latitude.text.toString().toDouble(), longitude.text.toString().toDouble()), interval.text.toString().toInt(), settings.weatherData)
             PreferencesUtils.setPreferences({x, y -> getSharedPreferences(x, y)}, settings )
         }
     }
 
     private fun setTextBoxes(): Unit {
-        val settings = PreferencesUtils.getPreferences { s, i -> getSharedPreferences(s,i)}
         longitude.text = settings.location.longitude.toString()
         latitude.text = settings.location.latitude.toString()
         interval.text = settings.interval.toString()
