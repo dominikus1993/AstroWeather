@@ -47,7 +47,7 @@ class PreferencesUtils{
             intervalPreferencesEditor.putInt(Constants.Interval.value, appData.interval)
             intervalPreferencesEditor.commit()
 
-            weatherPreferences.putString(Constants.WeatherData.value, gson.toJson(appData.weatherData))
+            weatherPreferences.putString(Constants.WeatherData.value + appData.weatherData.localization?.cityName, gson.toJson(appData.weatherData))
             weatherPreferences.commit()
 
         }
