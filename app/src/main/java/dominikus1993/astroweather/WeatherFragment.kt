@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
@@ -16,6 +17,7 @@ import dependency.WeatherPresenterDependencyResolver
 import model.AppData
 import model.Localization
 import model.LocalizationWeatherData
+import model.WeatherSettingsData
 import presenters.IMyLocalizationPresenter
 import presenters.IWeatherPresenter
 import utils.AppConstants
@@ -84,6 +86,26 @@ class WeatherFragment : Fragment(), IAstroWeatherView<LocalizationWeatherData> ,
         val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, localizations)
         spinner.adapter = adapter
         spinner.setSelection(localizations?.indexOf(data.weatherData.chosenCity) ?: 0)
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
+            override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedLocalization = Localization(localizations?.get(position) as String)
+                val newWeatherData = with<WeatherSettingsData,WeatherSettingsData>(data.weatherData, {
+                    chosenCity = selectedLocalization.cityName
+                    return
+                } )
+
+                PreferencesUtils.setPreferences({ s, i -> activity.getSharedPreferences(s,i) }, AppData(data.location, data.interval, newWeatherData))
+                presenter.getWeatherDataByLocalization(Localization(localizations?.get(position) as String), context, data)
+            }
+
+        }
 
     }
 }// Required empty public constructor
