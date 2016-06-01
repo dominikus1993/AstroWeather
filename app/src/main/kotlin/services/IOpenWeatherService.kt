@@ -12,7 +12,4 @@ import retrofit2.http.Query
 interface IOpenWeatherService {
     @GET("data/2.5/forecast")
     fun getWeatherForLocalization(@Query("q") cityName:String, @Query("appId") appId: String): Call<WeatherData>
-
-    @GET("locations/v1/335315.json")
-    fun getAllCities(@Query("apikey") apiKey:String)
 }
