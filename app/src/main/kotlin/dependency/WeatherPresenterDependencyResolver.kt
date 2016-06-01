@@ -7,6 +7,7 @@ import presenters.WeatherPresenter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import services.IOpenWeatherService
+import utils.AccuWeatherServiceBuilder
 import utils.ConfigUtil
 import utils.Constants
 import view.IAstroWeatherView
@@ -17,8 +18,7 @@ import view.IAstroWeatherView
 class WeatherPresenterDependencyResolver{
     companion object{
         fun get(view: IAstroWeatherView<LocalizationWeatherData>, context: Context):IWeatherPresenter{
-            val service = Retrofit.Builder().baseUrl(ConfigUtil.getByKey(context,  Constants.OpenWeatherBaseUrl.value)).addConverterFactory(GsonConverterFactory.create()).build().create(IOpenWeatherService::class.java)
-            return WeatherPresenter(view, service)
+            return WeatherPresenter(view, AccuWeatherServiceBuilder.getService(context) as IOpenWeatherService)
         }
     }
 }
