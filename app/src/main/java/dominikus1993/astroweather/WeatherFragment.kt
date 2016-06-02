@@ -47,9 +47,11 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_weather, container, false)
-
+        setUp(view)
         presenter = WeatherPresenterDependencyResolver.get()
         val presenterFun = presenter.getWeatherDataByLocalization(context, AccuWeatherServiceBuilder.getService(context) as IOpenWeatherService)
+
+        refresh(WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }, presenterFun)
 
         return view
     }
@@ -67,8 +69,8 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
         super.onDetach()
     }
 
-    fun setUp(){
-
+    fun setUp(view: View?){
+        test = view?.findViewById(R.id.test) as TextView
     }
 
     fun refresh(weatherSettings: WeatherSettings, presenterFun:  (WeatherSettings, (WeatherData?) -> Unit, (Throwable?) -> Unit) -> Unit){
