@@ -9,14 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import dependency.WeatherPresenterDependencyResolver
 import model.AppData
-import model.Localization
 import model.WeatherData
 import model.WeatherSettings
 import presenters.IMyLocalizationPresenter
 import presenters.IWeatherPresenter
+import services.IOpenWeatherService
+import utils.AccuWeatherServiceBuilder
 import utils.AppConstants
 import utils.AstroCalculatorUtils
+import view.IAstroWeatherView
 
 
 /**
@@ -27,7 +30,7 @@ import utils.AstroCalculatorUtils
  * Use the [WeatherFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class WeatherFragment : Fragment(){
+class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
 
     private lateinit var presenter:IWeatherPresenter
     private lateinit var localizationPresenter:IMyLocalizationPresenter
@@ -44,6 +47,9 @@ class WeatherFragment : Fragment(){
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_weather, container, false)
+
+        presenter = WeatherPresenterDependencyResolver.get()
+        presenterFun = presenter.getWeatherDataByLocalization(context, AccuWeatherServiceBuilder.getService(context) as IOpenWeatherService)
         return view
     }
 
@@ -58,5 +64,14 @@ class WeatherFragment : Fragment(){
 
     override fun onDetach() {
         super.onDetach()
+    }
+
+
+    fun refresh(){
+
+    }
+
+    override fun showData(data: WeatherData?) {
+        throw UnsupportedOperationException()
     }
 }// Required empty public constructor
