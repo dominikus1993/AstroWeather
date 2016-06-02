@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import dependency.WeatherPresenterDependencyResolver
 import model.AppData
 import model.WeatherData
@@ -37,7 +38,6 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
     private lateinit var test:TextView
     private lateinit var settings:AppData
 
-    private lateinit var presenterFun:  (WeatherSettings, (WeatherData?) -> Unit, (Throwable?) -> Unit) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +49,8 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
         val view = inflater!!.inflate(R.layout.fragment_weather, container, false)
 
         presenter = WeatherPresenterDependencyResolver.get()
-        presenterFun = presenter.getWeatherDataByLocalization(context, AccuWeatherServiceBuilder.getService(context) as IOpenWeatherService)
+        val presenterFun = presenter.getWeatherDataByLocalization(context, AccuWeatherServiceBuilder.getService(context) as IOpenWeatherService)
+
         return view
     }
 
@@ -66,9 +67,17 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
         super.onDetach()
     }
 
+    fun setUp(){
 
-    fun refresh(){
+    }
 
+    fun refresh(weatherSettings: WeatherSettings, presenterFun:  (WeatherSettings, (WeatherData?) -> Unit, (Throwable?) -> Unit) -> Unit){
+        presenterFun(weatherSettings, {it ->
+            this.showData(it)
+        }, {it ->
+            val toast = Toast.makeText(context, it?.message, Toast.LENGTH_SHORT)
+            toast.show()
+        })
     }
 
     override fun showData(data: WeatherData?) {
