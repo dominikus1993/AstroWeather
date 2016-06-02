@@ -5,14 +5,10 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import dependency.MyLocalizationPresenterDependencyResolver
-import model.AppData
 import presenters.IMyLocalizationPresenter
-import view.IAstroWeatherView
-import view.ILocalizationsView
 import java.util.*
 
-class MyLocalizations : AppCompatActivity(), ILocalizationsView{
+class MyLocalizations : AppCompatActivity(){
 
     private lateinit var localizationList : ListView
     private lateinit var presenter : IMyLocalizationPresenter
@@ -28,17 +24,7 @@ class MyLocalizations : AppCompatActivity(), ILocalizationsView{
         adapter = ArrayAdapter(applicationContext, android.R.layout.simple_spinner_item, list)
         localizationList = findViewById(R.id.localizations) as ListView
         localizationList.adapter = adapter
-        presenter = MyLocalizationPresenterDependencyResolver.get(this)
         presenter.showAllMyCities { s, i -> getSharedPreferences(s, i) }
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
-
-    override fun showLocalizations(data: AppData): Unit{
-        val localizationsNames = data.weatherData.localizationWeatherData?.map { it -> it.localization?.cityName }
-        localizationsNames?.forEach { it ->
-            list.add(it)
-            adapter.notifyDataSetChanged()
-        }
-    }
-
 }
