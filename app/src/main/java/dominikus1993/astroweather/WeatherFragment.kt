@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import dependency.WeatherPresenterDependencyResolver
-import model.AppData
 import model.WeatherData
 import model.WeatherSettings
 import presenters.IMyLocalizationPresenter
@@ -35,7 +34,6 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
     private lateinit var presenter:IWeatherPresenter
     private lateinit var localizationPresenter:IMyLocalizationPresenter
     private lateinit var test:TextView
-    private lateinit var settings:AppData
     private lateinit var presenterFun:(WeatherSettings, (WeatherData?) -> Unit, (Throwable?) -> Unit) -> Unit;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,6 +91,9 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val settings = WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }
+                settings.chosenCity = settings.cities?.get(position)
+                WeatherSettings.setSettings(settings, { s, i -> activity.getSharedPreferences(s, i) })
                 refresh(WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }, presenterFun)
             }
 
@@ -110,6 +111,6 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
     }
 
     override fun showData(data: WeatherData?) {
-        throw UnsupportedOperationException()
+        test.text = data?.list?.first()?.main?.temp.toString()
     }
 }// Required empty public constructor

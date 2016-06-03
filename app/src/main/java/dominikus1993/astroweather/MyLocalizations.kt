@@ -64,6 +64,8 @@ class MyLocalizations : AppCompatActivity(), IAstroWeatherView<WeatherSettings>{
 
                             WeatherSettings.setSettings(newSettings, { s,i -> getSharedPreferences(s, i)})
                             presenter.showAllMyCities { s, i -> getSharedPreferences(s, i) }
+                            val toast = Toast.makeText(applicationContext, "Pomyślnie dodałęm miasto", Toast.LENGTH_SHORT)
+                            toast.show()
 
                         }
                         else{
@@ -86,6 +88,7 @@ class MyLocalizations : AppCompatActivity(), IAstroWeatherView<WeatherSettings>{
 
 
     override fun showData(data: WeatherSettings) {
+        adapter.clear()
         adapter.addAll(data.cities)
     }
 }

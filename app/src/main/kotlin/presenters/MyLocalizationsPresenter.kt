@@ -16,5 +16,7 @@ class MyLocalizationsPresenter : IMyLocalizationPresenter{
 
 
     override fun showAllMyCities(getSharedPreferences : (String, Int) -> SharedPreferences){
+        val settings = WeatherSettings.getFromSettings { s, i -> getSharedPreferences(s, i) }
+        view.showData(settings)
     }
 }
