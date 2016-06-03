@@ -88,7 +88,6 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
                 refresh(WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }, presenterFun)
             }
 
