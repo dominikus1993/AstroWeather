@@ -1,25 +1,20 @@
 package presenters
 
 import android.content.SharedPreferences
-import model.AppData
-import utils.PreferencesUtils
+import model.WeatherSettings
 import view.IAstroWeatherView
-import view.ILocalizationsView
 
 /**
  * Created by domin_000 on 01.06.2016.
  */
 class MyLocalizationsPresenter : IMyLocalizationPresenter{
-    private val view: ILocalizationsView;
+    private val view: IAstroWeatherView<WeatherSettings>;
 
-    constructor(view: ILocalizationsView) {
+    constructor(view: IAstroWeatherView<WeatherSettings>) {
         this.view = view
     }
 
 
     override fun showAllMyCities(getSharedPreferences : (String, Int) -> SharedPreferences){
-        val myData = PreferencesUtils.getPreferences { s, i -> getSharedPreferences(s,i) }
-
-        view.showLocalizations(myData)
     }
 }

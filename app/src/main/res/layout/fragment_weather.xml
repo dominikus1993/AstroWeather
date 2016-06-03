@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     tools:context="dominikus1993.astroweather.WeatherFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
         android:layout_width="fill_parent"

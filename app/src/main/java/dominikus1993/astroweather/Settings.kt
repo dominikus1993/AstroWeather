@@ -34,7 +34,7 @@ class Settings : AppCompatActivity() {
         setTextBoxes()
 
         saveButton.setOnClickListener { l ->
-            val settings = AppData(AstroCalculator.Location(latitude.text.toString().toDouble(), longitude.text.toString().toDouble()), interval.text.toString().toInt(), settings.weatherData)
+            val settings = AppData(AstroCalculator.Location(latitude.text.toString().toDouble(), longitude.text.toString().toDouble()), interval.text.toString().toInt())
             PreferencesUtils.setPreferences({x, y -> getSharedPreferences(x, y)}, settings )
         }
     }

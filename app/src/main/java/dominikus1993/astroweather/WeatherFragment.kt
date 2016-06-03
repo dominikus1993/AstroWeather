@@ -46,13 +46,21 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_weather, container, false)
-        setUp(view)
         presenter = WeatherPresenterDependencyResolver.get()
         presenterFun = presenter.getWeatherDataByLocalization(context, AccuWeatherServiceBuilder.getService(context) as IOpenWeatherService)
-
-        refresh(WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }, presenterFun)
-
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(!hidden){
+            setUp(view)
+            refresh(WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }, presenterFun)
+        }
     }
 
     override fun onAttach(context: Context?) {
@@ -71,10 +79,9 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
     fun setUp(view: View?){
         test = view?.findViewById(R.id.test) as TextView
 
-
-        //spiner
+        //spinner
         val settings = WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }
-        val spinner = this.view?.findViewById(R.id.localizationsS) as Spinner
+        val spinner = view?.findViewById(R.id.localizationsS) as Spinner
         val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, settings.cities)
         spinner.adapter = adapter
         spinner.setSelection(settings.cities?.indexOf(settings.chosenCity) ?: 0)

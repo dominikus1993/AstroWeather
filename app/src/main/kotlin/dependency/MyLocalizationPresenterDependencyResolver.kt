@@ -1,6 +1,7 @@
 package dependency
 
 import model.AppData
+import model.WeatherSettings
 import presenters.IMyLocalizationPresenter
 import presenters.MyLocalizationsPresenter
 import view.IAstroWeatherView
@@ -11,7 +12,7 @@ import view.ILocalizationsView
  */
 class MyLocalizationPresenterDependencyResolver{
     companion object {
-        fun get(view: ILocalizationsView):IMyLocalizationPresenter{
+        fun get(view: IAstroWeatherView<WeatherSettings>):IMyLocalizationPresenter{
             return MyLocalizationsPresenter(view)
         }
     }

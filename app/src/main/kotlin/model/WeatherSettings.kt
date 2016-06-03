@@ -14,15 +14,15 @@ class WeatherSettings {
 
     @SerializedName("chosenCity")
     @Expose
-    var chosenCity: String? = null
+    var chosenCity: String? = ""
 
     @SerializedName("cities")
     @Expose
-    var cities: List<String>? = null
+    var cities: List<String>? = listOf()
 
     @SerializedName("weatherData")
     @Expose
-    var weatherData: List<WeatherData>? = null
+    var weatherData: List<WeatherData>? = listOf()
 
 
     companion object{
