@@ -53,14 +53,12 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
 
     override fun onStart() {
         super.onStart()
+        setUp(view)
+        refresh(WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }, presenterFun)
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        if(!hidden){
-            setUp(view)
-            refresh(WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }, presenterFun)
-        }
     }
 
     override fun onAttach(context: Context?) {

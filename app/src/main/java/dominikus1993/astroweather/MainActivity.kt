@@ -48,11 +48,24 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
+        when(id){
+            R.id.action_settings -> {
+                val intent = Intent(this, Settings::class.java)
+                startActivity(intent)
+            }
+            R.id.localizations_settings -> {
+                val intent = Intent(this, MyLocalizations::class.java)
+                startActivity(intent)
+            }
 
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             val intent = Intent(this, Settings::class.java)
             startActivity(intent)
+        }
+        else{
+
         }
 
         return super.onOptionsItemSelected(item)

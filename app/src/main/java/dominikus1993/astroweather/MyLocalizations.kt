@@ -58,12 +58,13 @@ class MyLocalizations : AppCompatActivity(), IAstroWeatherView<WeatherSettings>{
                         if(body != null){
                             val settings = WeatherSettings.getFromSettings { s, i -> getSharedPreferences(s, i) }
                             val newSettings = WeatherSettings()
-                            newSettings.cities = settings.cities?.plus(listOf(cityName.text.toString()))
+                            newSettings.cities = settings.cities?.plus(listOf(body.city?.name as String))
                             newSettings.chosenCity = settings.chosenCity
                             newSettings.weatherData = settings.weatherData?.plus(body)
 
                             WeatherSettings.setSettings(newSettings, { s,i -> getSharedPreferences(s, i)})
                             presenter.showAllMyCities { s, i -> getSharedPreferences(s, i) }
+
                         }
                         else{
                             val toast = Toast.makeText(applicationContext, "Nie ma takiego miasta nie można dodać miasta", Toast.LENGTH_SHORT)
