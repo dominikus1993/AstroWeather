@@ -8,8 +8,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import dependency.WeatherPresenterDependencyResolver
 import model.AppData
 import model.WeatherData
@@ -37,7 +36,7 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
     private lateinit var localizationPresenter:IMyLocalizationPresenter
     private lateinit var test:TextView
     private lateinit var settings:AppData
-
+    private lateinit var presenterFun:(WeatherSettings, (WeatherData?) -> Unit, (Throwable?) -> Unit) -> Unit;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +48,7 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
         val view = inflater!!.inflate(R.layout.fragment_weather, container, false)
         setUp(view)
         presenter = WeatherPresenterDependencyResolver.get()
-        val presenterFun = presenter.getWeatherDataByLocalization(context, AccuWeatherServiceBuilder.getService(context) as IOpenWeatherService)
+        presenterFun = presenter.getWeatherDataByLocalization(context, AccuWeatherServiceBuilder.getService(context) as IOpenWeatherService)
 
         refresh(WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }, presenterFun)
 
@@ -71,6 +70,30 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
 
     fun setUp(view: View?){
         test = view?.findViewById(R.id.test) as TextView
+
+
+        //spiner
+        val settings = WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }
+        val spinner = this.view?.findViewById(R.id.localizationsS) as Spinner
+        val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, settings.cities)
+        spinner.adapter = adapter
+        spinner.setSelection(settings.cities?.indexOf(settings.chosenCity) ?: 0)
+
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
+            override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+                refresh(WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }, presenterFun)
+            }
+
+        }
+
     }
 
     fun refresh(weatherSettings: WeatherSettings, presenterFun:  (WeatherSettings, (WeatherData?) -> Unit, (Throwable?) -> Unit) -> Unit){
