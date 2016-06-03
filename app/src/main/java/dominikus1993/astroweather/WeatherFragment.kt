@@ -2,6 +2,9 @@ package dominikus1993.astroweather
 
 import android.Manifest
 import android.content.Context
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
@@ -12,13 +15,17 @@ import android.widget.*
 import dependency.WeatherPresenterDependencyResolver
 import model.WeatherData
 import model.WeatherSettings
-import presenters.IMyLocalizationPresenter
+import okhttp3.ResponseBody
 import presenters.IWeatherPresenter
+import retrofit2.Call
+import retrofit2.Response
 import services.IOpenWeatherService
 import utils.AccuWeatherServiceBuilder
 import utils.AppConstants
 import utils.AstroCalculatorUtils
+import utils.format
 import view.IAstroWeatherView
+import java.io.BufferedInputStream
 
 
 /**
@@ -32,9 +39,10 @@ import view.IAstroWeatherView
 class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
 
     private lateinit var presenter:IWeatherPresenter
-    private lateinit var localizationPresenter:IMyLocalizationPresenter
     private lateinit var test:TextView
     private lateinit var presenterFun:(WeatherSettings, (WeatherData?) -> Unit, (Throwable?) -> Unit) -> Unit;
+    private lateinit var hoursAdapter:ArrayAdapter<String>
+    private lateinit var hoursSpinner:Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +81,7 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
     }
 
     fun setUp(view: View?){
-        test = view?.findViewById(R.id.test) as TextView
+        test = view?.findViewById(R.id.temp) as TextView
 
         //spinner
         val settings = WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }
@@ -82,6 +90,23 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
         spinner.adapter = adapter
         spinner.setSelection(settings.cities?.indexOf(settings.chosenCity) ?: 0)
 
+        hoursSpinner = view?.findViewById(R.id.hours) as Spinner
+        hoursAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, mutableListOf())
+        hoursSpinner.adapter = hoursAdapter
+
+        hoursSpinner.onItemSelectedListener = object : AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
+            override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val settings = WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }
+                showData(settings.weatherData?.filter { it -> it.city?.name.equals(settings.chosenCity)}?.first())
+            }
+
+        }
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
             override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -103,6 +128,9 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
 
     fun refresh(weatherSettings: WeatherSettings, presenterFun:  (WeatherSettings, (WeatherData?) -> Unit, (Throwable?) -> Unit) -> Unit){
         presenterFun(weatherSettings, {it ->
+            hoursAdapter.clear()
+            hoursAdapter.addAll(it?.list?.map { x -> x.dtTxt})
+            hoursSpinner.setSelection(0)
             this.showData(it)
         }, {it ->
             val toast = Toast.makeText(context, it?.message, Toast.LENGTH_SHORT)
@@ -110,7 +138,39 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
         })
     }
 
+
     override fun showData(data: WeatherData?) {
-        test.text = data?.list?.first()?.main?.temp.toString()
+        val hour = data?.list?.get(hoursSpinner.selectedItemPosition)
+        test.text = (hour?.main?.temp?.minus(273)?.format(2)).toString()
+
+        setBackground(hour?.weather?.first()?.icon ?: "")
+    }
+
+    fun setBackground(icon: String): Unit {
+        val service = AccuWeatherServiceBuilder.getIconService()
+        if(AstroCalculatorUtils.isOnline(context)){
+            val res = service.getWeatherForLocalization("$icon.png").enqueue(object: retrofit2.Callback<ResponseBody>{
+                override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
+                    view?.background = activity.resources.getDrawable(R.drawable.ic_close_24dp)
+                }
+
+                override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
+                    try{
+                        val stream = response?.body()?.byteStream()
+                        val buffered = BufferedInputStream(stream)
+                        val bitmap = BitmapFactory.decodeStream(buffered)
+                        view?.background = BitmapDrawable(resources,bitmap)
+                    }catch(ex:Exception){
+                        view?.background = activity.resources.getDrawable(R.drawable.ic_close_24dp)
+                    }
+
+                }
+            })
+        }
+        else{
+            val toast = Toast.makeText(context, "Brak połaczenia internetowego", Toast.LENGTH_SHORT)
+            toast.show()
+        }
+
     }
 }// Required empty public constructor

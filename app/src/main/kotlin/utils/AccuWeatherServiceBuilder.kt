@@ -3,6 +3,7 @@ package utils
 import android.content.Context
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import services.IIconService
 import services.IOpenWeatherService
 
 /**
@@ -12,6 +13,11 @@ class AccuWeatherServiceBuilder{
     companion object{
         fun getService(context:Context): IOpenWeatherService? {
             val service = Retrofit.Builder().baseUrl(ConfigUtil.getByKey(context,  Constants.OpenWeatherBaseUrl.value)).addConverterFactory(GsonConverterFactory.create()).build().create(IOpenWeatherService::class.java)
+            return service
+        }
+
+        fun getIconService():IIconService{
+            val service = Retrofit.Builder().baseUrl("http://openweathermap.org/").build().create(IIconService::class.java)
             return service
         }
     }

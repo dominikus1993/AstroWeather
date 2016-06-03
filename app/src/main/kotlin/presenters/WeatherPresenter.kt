@@ -6,6 +6,7 @@ import model.WeatherData
 import model.WeatherSettings
 import retrofit2.Call
 import retrofit2.Response
+import services.IIconService
 import services.IOpenWeatherService
 import utils.AstroCalculatorUtils
 import utils.ConfigUtil
