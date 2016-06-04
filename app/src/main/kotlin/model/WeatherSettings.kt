@@ -39,7 +39,7 @@ class WeatherSettings {
             return gson.fromJson(weatherPreferences.getString(Constants.WeatherData.value, "{}"), WeatherSettings::class.java)
         }
 
-        fun setSettings(weatherSettings: WeatherSettings,getSharedPreferences : (String, Int) -> SharedPreferences){
+        fun setSettings(weatherSettings: WeatherSettings, getSharedPreferences : (String, Int) -> SharedPreferences){
             val weatherPreferences = getSharedPreferences(Constants.WeatherData.value, 0).edit()
             weatherPreferences.putString(Constants.WeatherData.value, gson.toJson(weatherSettings))
             weatherPreferences.commit()

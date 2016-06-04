@@ -13,9 +13,17 @@ import android.widget.TextView
 import android.widget.Toast
 import dependency.ViewPagerFactory
 import model.Time
+import model.WeatherData
+import model.WeatherSettings
 import presenters.IAstroWeatherMainActivityPresenter
 import presenters.MainActivityPresenter
+import retrofit2.Call
+import retrofit2.Response
+import services.IOpenWeatherService
+import utils.AccuWeatherServiceBuilder
 import utils.AstroCalculatorUtils
+import utils.ConfigUtil
+import utils.Constants
 import view.IAstroWeatherView
 
 class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
@@ -60,8 +68,34 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
                 startActivity(intent)
             }
             R.id.refresh -> {
-                if(AstroCalculatorUtils.isOnline(applicationContext)){
+                if(AstroCalculatorUtils.isOnline(applicationContext))
+                {
+                    val settings = WeatherSettings.getFromSettings { s, i -> getSharedPreferences(s, i) }
+                    val service = AccuWeatherServiceBuilder.getService(applicationContext) as IOpenWeatherService
+                    val data = service.getWeatherForLocalization(settings.chosenCity as String, ConfigUtil.getByKey(applicationContext, Constants.OpenWeatherApiKey.value) as String)
 
+                    data.enqueue(object : retrofit2.Callback<WeatherData> {
+                        override fun onResponse(call: Call<WeatherData>?, response: Response<WeatherData>?) {
+                            val res = response?.body()
+                            if(res != null){
+                                settings.weatherData = settings.weatherData?.map { it -> if(it.city?.name?.equals(res.city?.name) ?: false) res else it}
+                                WeatherSettings.setSettings(settings, {s, i -> getSharedPreferences(s, i)})
+                                val fragment = supportFragmentManager.findFragmentById(R.id.weatherFragment)
+                                val ft = supportFragmentManager.beginTransaction();
+                                ft.detach(fragment)
+                                ft.attach(fragment)
+                                ft.commit()
+                            }else{
+                                val toast = Toast.makeText(applicationContext, "Nie udało się zaktualizować danych pogodowych", Toast.LENGTH_SHORT)
+                                toast.show()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<WeatherData>?, t: Throwable?) {
+                            val toast = Toast.makeText(applicationContext, "Nie udało się zaktualizować danych pogodowych", Toast.LENGTH_SHORT)
+                            toast.show()
+                        }
+                    })
                 }
                 else{
                     val toast = Toast.makeText(applicationContext, "Brak połaczenia z internetem", Toast.LENGTH_SHORT)
