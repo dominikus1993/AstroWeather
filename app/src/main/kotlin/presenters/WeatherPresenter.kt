@@ -4,9 +4,9 @@ import android.content.Context
 import android.util.Log
 import model.WeatherData
 import model.WeatherSettings
+import org.joda.time.format.DateTimeFormat
 import retrofit2.Call
 import retrofit2.Response
-import services.IIconService
 import services.IOpenWeatherService
 import utils.AstroCalculatorUtils
 import utils.ConfigUtil
@@ -22,7 +22,10 @@ class WeatherPresenter : IWeatherPresenter {
 
     override fun getWeatherDataByLocalization(context: Context, service: IOpenWeatherService): (WeatherSettings, (WeatherData?) -> Unit, (Throwable?) -> Unit) -> Unit {
         return {weatherSettings: WeatherSettings, onSuccess : (WeatherData?) -> Unit, onFailure: (Throwable?) -> Unit ->
-            if (AstroCalculatorUtils.isOnline(context) && weatherSettings.chosenCity != null) {
+            val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+            val isToOld = formatter.parseDateTime(weatherSettings.weatherData?.filter{it -> it.city?.name?.equals(weatherSettings.chosenCity) ?: false}?.first()?.list?.first()?.dtTxt).isAfterNow
+
+            if (AstroCalculatorUtils.isOnline(context) && weatherSettings.chosenCity != null && isToOld) {
                 val data = service.getWeatherForLocalization(weatherSettings.chosenCity as String, ConfigUtil.getByKey(context, Constants.OpenWeatherApiKey.value) as String)
                 data.enqueue(object : retrofit2.Callback<WeatherData> {
                     override fun onResponse(call: Call<WeatherData>?, response: Response<WeatherData>?) {

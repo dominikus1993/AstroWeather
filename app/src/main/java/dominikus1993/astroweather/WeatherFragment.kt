@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
@@ -20,10 +19,7 @@ import presenters.IWeatherPresenter
 import retrofit2.Call
 import retrofit2.Response
 import services.IOpenWeatherService
-import utils.AccuWeatherServiceBuilder
-import utils.AppConstants
-import utils.AstroCalculatorUtils
-import utils.format
+import utils.*
 import view.IAstroWeatherView
 import java.io.BufferedInputStream
 
@@ -40,6 +36,9 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
 
     private lateinit var presenter:IWeatherPresenter
     private lateinit var test:TextView
+    private lateinit var wind:TextView
+    private lateinit var pressure:TextView
+    private lateinit var windDirection:TextView
     private lateinit var presenterFun:(WeatherSettings, (WeatherData?) -> Unit, (Throwable?) -> Unit) -> Unit;
     private lateinit var hoursAdapter:ArrayAdapter<String>
     private lateinit var hoursSpinner:Spinner
@@ -82,7 +81,9 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
 
     fun setUp(view: View?){
         test = view?.findViewById(R.id.temp) as TextView
-
+        wind = view?.findViewById(R.id.wind) as TextView
+        pressure = view?.findViewById(R.id.pressure) as TextView
+        windDirection = view?.findViewById(R.id.windDirection) as TextView
         //spinner
         val settings = WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }
         val spinner = view?.findViewById(R.id.localizationsS) as Spinner
@@ -142,7 +143,9 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
     override fun showData(data: WeatherData?) {
         val hour = data?.list?.get(hoursSpinner.selectedItemPosition)
         test.text = (hour?.main?.temp?.minus(273)?.format(2)).toString()
-
+        wind.text = "${hour?.wind?.speed} m/s"
+        windDirection.text = hour?.wind?.deg?.dagreeToDirection()
+        pressure.text = hour?.main?.pressure.toString()
         setBackground(hour?.weather?.first()?.icon ?: "")
     }
 

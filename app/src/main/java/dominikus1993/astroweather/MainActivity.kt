@@ -80,11 +80,6 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
                             if(res != null){
                                 settings.weatherData = settings.weatherData?.map { it -> if(it.city?.name?.equals(res.city?.name) ?: false) res else it}
                                 WeatherSettings.setSettings(settings, {s, i -> getSharedPreferences(s, i)})
-                                val fragment = supportFragmentManager.findFragmentById(R.id.weatherFragment)
-                                val ft = supportFragmentManager.beginTransaction();
-                                ft.detach(fragment)
-                                ft.attach(fragment)
-                                ft.commit()
                             }else{
                                 val toast = Toast.makeText(applicationContext, "Nie udało się zaktualizować danych pogodowych", Toast.LENGTH_SHORT)
                                 toast.show()
