@@ -10,10 +10,12 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import dependency.ViewPagerFactory
 import model.Time
 import presenters.IAstroWeatherMainActivityPresenter
 import presenters.MainActivityPresenter
+import utils.AstroCalculatorUtils
 import view.IAstroWeatherView
 
 class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
@@ -56,6 +58,15 @@ class MainActivity : AppCompatActivity, IAstroWeatherView<Time> {
             R.id.localizations_settings -> {
                 val intent = Intent(this, MyLocalizations::class.java)
                 startActivity(intent)
+            }
+            R.id.refresh -> {
+                if(AstroCalculatorUtils.isOnline(applicationContext)){
+
+                }
+                else{
+                    val toast = Toast.makeText(applicationContext, "Brak połaczenia z internetem", Toast.LENGTH_SHORT)
+                    toast.show()
+                }
             }
 
         }
