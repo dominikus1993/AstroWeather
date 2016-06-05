@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import dependency.WeatherPresenterDependencyResolver
+import kotlinx.android.synthetic.main.fragment_weather.*
 import model.WeatherData
 import model.WeatherSettings
 import okhttp3.ResponseBody
@@ -39,6 +40,8 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
     private lateinit var wind:TextView
     private lateinit var pressure:TextView
     private lateinit var windDirection:TextView
+    private lateinit var humidity:TextView
+    private lateinit var maxTemp:TextView
     private lateinit var presenterFun:(WeatherSettings, (WeatherData?) -> Unit, (Throwable?) -> Unit) -> Unit;
     private lateinit var hoursAdapter:ArrayAdapter<String>
     private lateinit var hoursSpinner:Spinner
@@ -84,6 +87,9 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
         wind = view?.findViewById(R.id.wind) as TextView
         pressure = view?.findViewById(R.id.pressure) as TextView
         windDirection = view?.findViewById(R.id.windDirection) as TextView
+        maxTemp = view?.findViewById(R.id.tempMax) as TextView
+        humidity = view?.findViewById(R.id.humidity) as TextView
+
         //spinner
         val settings = WeatherSettings.getFromSettings { s, i -> activity.getSharedPreferences(s, i) }
         val spinner = view?.findViewById(R.id.localizationsS) as Spinner
@@ -142,10 +148,13 @@ class WeatherFragment : Fragment(), IAstroWeatherView<WeatherData?>{
 
     override fun showData(data: WeatherData?) {
         val hour = data?.list?.get(hoursSpinner.selectedItemPosition)
-        test.text = (hour?.main?.temp?.minus(273)?.format(2)).toString()
+        test.text = hour?.main?.temp?.minus(273)?.format(2)
         wind.text = "${hour?.wind?.speed} m/s"
         windDirection.text = hour?.wind?.deg?.dagreeToDirection()
         pressure.text = hour?.main?.pressure.toString()
+        tempMax.text = hour?.main?.tempMax?.minus(273)?.format(2)
+        humidity.text = hour?.main?.humidity.toString()
+
         setBackground(hour?.weather?.first()?.icon ?: "")
     }
 
